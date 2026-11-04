@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pnpm
+        run: npm install --global pnpm@11.25.0
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck, test, and build
+        run: pnpm check
+      - name: Verify compiled MVP across three trials
+        run: node dist/cli.js demo --all --trials 3 --aa-evaluations 3
+      - name: Save verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inferencegate-verification-${{ matrix.os }}
+          path: reports/demo/
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build --tag inferencegate:ci .
+      - name: Verify container identity and help
+        run: |
+          mkdir -p reports
+          docker image inspect inferencegate:ci --format '{{.Id}}' > reports/container-image-id.txt
+          docker run --rm inferencegate:ci --help
+          test "$(docker run --rm --entrypoint id inferencegate:ci -u)" != "0"
+      - name: Verify packaged compare and exit codes
+        run: |
+          mkdir -p reports/container-demo
+          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD/reports/container-demo:/reports" inferencegate:ci demo --all --trials 3 --output-dir /reports
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inferencegate-container-evidence
+          path: reports/

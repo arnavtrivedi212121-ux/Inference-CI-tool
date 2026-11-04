@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "baseline": {
+    "url": "http://127.0.0.1:8001/v1/chat/completions",
+    "model": "mock-model",
+    "deployment": { "id": "mock-baseline", "runtimeVersion": "mock-v2", "modelRevision": "mock-v2", "tokenizerId": "mock-v2", "hardware": "local CPU" }
+  },
+  "candidate": {
+    "url": "http://127.0.0.1:8002/v1/chat/completions",
+    "model": "mock-model",
+    "deployment": { "id": "mock-candidate", "runtimeVersion": "mock-v2", "modelRevision": "mock-v2", "tokenizerId": "mock-v2", "hardware": "local CPU" }
+  },
+  "workload": "./workloads/smoke.json",
+  "run": {
+    "concurrency": 4,
+    "warmupRequests": 5,
+    "repetitions": 10,
+    "timeoutMs": 30000,
+    "seed": 42,
+    "trials": 5,
+    "cooldownMs": 1000,
+    "arrivalIntervalMs": 150,
+    "maxArrivalLagMs": 50
+  },
+  "thresholds": {
+    "ttftP95MaxIncreasePercent": 20,
+    "latencyP95MaxIncreasePercent": 20,
+    "throughputMaxDecreasePercent": 10,
+    "errorRateMaxIncreasePercentagePoints": 1,
+    "candidateMaxErrorRatePercent": 1
+  },
+  "baselineValidity": {
+    "maxErrorRatePercent": 1,
+    "minSuccessfulRequests": 100
+  },
+  "outputDir": "../reports/latest"
+}

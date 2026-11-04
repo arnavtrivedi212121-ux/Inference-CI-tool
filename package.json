@@ -1,0 +1,31 @@
+{
+  "name": "inferencegate",
+  "version": "0.3.0-dev.3",
+  "private": true,
+  "license": "MIT",
+  "description": "Performance regression detection and release gating for LLM inference deployments.",
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "packageManager": "pnpm@11.25.0",
+  "bin": { "inferencegate": "dist/cli.js" },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "mock": "tsx src/cli.ts mock",
+    "mock:pair": "tsx src/cli.ts mock-pair",
+    "validate": "tsx src/cli.ts validate --config examples/inferencegate.json",
+    "compare": "tsx src/cli.ts compare",
+    "demo": "tsx src/cli.ts demo",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": { "zod": "4.6.7" },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}

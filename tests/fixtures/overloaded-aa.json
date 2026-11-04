@@ -1,0 +1,7 @@
+{
+  "sourceRunId": "51bfda35-b4c4-4b80-9d57-a4aec081bcde",
+  "description": "Counts from the saved real-vLLM A/A run. Unit tests reconstruct synthetic timings and request positions; this fixture is not raw GPU telemetry.",
+  "plannedPerPhase": 200,
+  "completedPerTrial": [[134, 149], [147, 151], [157, 156]],
+  "expected": { "plannedRequests": 1200, "dispatchedRequests": 894, "completedRequests": 894, "missedArrivals": 306, "failedRequests": 0 }
+}

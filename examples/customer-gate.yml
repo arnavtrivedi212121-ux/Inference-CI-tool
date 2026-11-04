@@ -1,0 +1,38 @@
+# Copy into your deployment repository and pin actions to your organization's approved SHAs.
+# Run only on a trusted self-hosted runner with network access to private staging endpoints.
+name: Inference release gate
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Reviewed CLI image: registry/name@sha256:... or local sha256:... ID'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: [self-hosted, linux, inference-staging]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare staging deployments
+        env:
+          INFERENCEGATE_IMAGE: ${{ inputs.image }}
+          BASELINE_API_KEY: ${{ secrets.BASELINE_API_KEY }}
+          CANDIDATE_API_KEY: ${{ secrets.CANDIDATE_API_KEY }}
+        run: |
+          if ! [[ "$INFERENCEGATE_IMAGE" =~ (^sha256:[a-f0-9]{64}$|^[a-zA-Z0-9./:_-]+@sha256:[a-f0-9]{64}$) ]]; then
+            echo 'An immutable image digest is required'; exit 2
+          fi
+          mkdir -p reports
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e BASELINE_API_KEY -e CANDIDATE_API_KEY \
+            -v "$PWD/deployment:/config:ro" -v "$PWD/reports:/reports" \
+            "$INFERENCEGATE_IMAGE" compare --config /config/inferencegate.json --lock /config/calibration/lock.json
+      # Supply the reviewed baseline lock and neighboring preparation.json under deployment/calibration/.
+      # No continue-on-error: FAIL/1 and INCONCLUSIVE or ERROR/2 all block this job.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inferencegate-evidence
+          path: reports/

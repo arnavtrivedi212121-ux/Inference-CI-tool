@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "arrivalIntervalsMs": [100, 250, 500],
+  "generatorHoldMs": 8000,
+  "baselineLimits": { "ttftP95MaxMs": 1000, "latencyP95MaxMs": 5000 }
+}

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "baseline": { "url": "http://127.0.0.1:18001/v1/chat/completions", "model": "validation-model" },
+  "candidate": { "url": "http://127.0.0.1:18001/v1/chat/completions", "model": "validation-model" },
+  "workload": "workloads/smoke.json",
+  "run": { "concurrency": 128, "warmupRequests": 16, "repetitions": 20, "timeoutMs": 10000, "seed": 42,
+    "trials": 5, "cooldownMs": 2000, "arrivalIntervalMs": 100, "maxArrivalLagMs": 50 },
+  "thresholds": { "ttftP95MaxIncreasePercent": 20, "latencyP95MaxIncreasePercent": 20,
+    "throughputMaxDecreasePercent": 10, "errorRateMaxIncreasePercentagePoints": 1, "candidateMaxErrorRatePercent": 1 },
+  "baselineValidity": { "maxErrorRatePercent": 1, "minSuccessfulRequests": 200 },
+  "comparability": { "maxOutputTokenDifferencePercent": 10 },
+  "outputDir": "../reports/gpu"
+}

@@ -1,0 +1,39 @@
+name: Opt-in GPU validation
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [controlled, functional]
+        default: controlled
+      aa_evaluations:
+        description: Complete A/A evaluations before configuration comparison (1–20)
+        default: '3'
+        required: true
+permissions:
+  contents: read
+jobs:
+  vllm:
+    concurrency:
+      group: inferencegate-gpu-${{ github.repository }}
+      cancel-in-progress: false
+    runs-on: [self-hosted, linux, x64, inferencegate-gpu]
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --global pnpm@11.25.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - name: Execute real-engine validation
+        env:
+          MODE: ${{ inputs.mode }}
+          AA_EVALUATIONS: ${{ inputs.aa_evaluations }}
+        run: node dist/cli.js validate-vllm --mode "$MODE" --config examples/vllm.json --plan examples/calibration-plan.json --aa-evaluations "$AA_EVALUATIONS"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vllm-validation-evidence
+          path: reports/gpu/

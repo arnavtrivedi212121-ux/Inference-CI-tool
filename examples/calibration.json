@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "baseline": {
+    "url": "http://127.0.0.1:18001/v1/chat/completions",
+    "model": "validation-model",
+    "deployment": {
+      "id": "qwen-reference-seq8",
+      "runtimeVersion": "vLLM 0.32.0",
+      "modelRevision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "tokenizerId": "Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775",
+      "hardware": "RTX 3060 12 GB; shared Windows desktop; functional calibration only",
+      "imageDigest": "sha256:6ee133356d49ed24cee03dd0cda3d3980279a11c107ce3e752c89e76540f41c9"
+    }
+  },
+  "candidate": { "url": "http://127.0.0.1:18002/v1/chat/completions", "model": "validation-model" },
+  "workload": "workloads/smoke.json",
+  "run": { "concurrency": 128, "warmupRequests": 16, "repetitions": 20, "timeoutMs": 10000, "seed": 42,
+    "trials": 3, "cooldownMs": 2000, "arrivalIntervalMs": 100, "maxArrivalLagMs": 50 },
+  "thresholds": { "ttftP95MaxIncreasePercent": 20, "latencyP95MaxIncreasePercent": 20,
+    "throughputMaxDecreasePercent": 10, "errorRateMaxIncreasePercentagePoints": 1, "candidateMaxErrorRatePercent": 1 },
+  "baselineValidity": { "maxErrorRatePercent": 1, "minSuccessfulRequests": 200 },
+  "comparability": { "maxOutputTokenDifferencePercent": 10 },
+  "outputDir": "../reports/preparation"
+}

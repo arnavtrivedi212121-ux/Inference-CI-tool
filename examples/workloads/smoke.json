@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "requests": [
+    { "id": "greeting", "messages": [{ "role": "user", "content": "Say hello in one sentence." }], "generation": { "temperature": 0, "max_tokens": 32 } },
+    { "id": "latency", "messages": [{ "role": "user", "content": "Explain latency in two sentences." }], "generation": { "temperature": 0, "max_tokens": 64 } },
+    { "id": "throughput", "messages": [{ "role": "user", "content": "Explain throughput in two sentences." }], "generation": { "temperature": 0, "max_tokens": 64 } },
+    { "id": "summary", "messages": [{ "role": "user", "content": "Summarize this: A service sends requests to two inference endpoints and compares their response times." }], "generation": { "temperature": 0, "max_tokens": 64 } },
+    { "id": "list", "messages": [{ "role": "user", "content": "List three reasons a server might become slower." }], "generation": { "temperature": 0, "max_tokens": 96 } },
+    { "id": "rewrite", "messages": [{ "role": "user", "content": "Rewrite this more clearly: The response time went up after we deployed the new settings." }], "generation": { "temperature": 0, "max_tokens": 64 } },
+    { "id": "arithmetic", "messages": [{ "role": "user", "content": "What is 12 times 8?" }], "generation": { "temperature": 0, "max_tokens": 32 } },
+    { "id": "system-message", "messages": [{ "role": "system", "content": "Answer briefly and plainly." }, { "role": "user", "content": "What is a performance regression?" }], "generation": { "temperature": 0, "max_tokens": 64 } },
+    { "id": "conversation", "messages": [{ "role": "user", "content": "What does a release gate do?" }, { "role": "assistant", "content": "It checks whether a deployment meets release requirements." }, { "role": "user", "content": "Give one example." }], "generation": { "temperature": 0, "max_tokens": 64 } },
+    { "id": "unicode", "messages": [{ "role": "user", "content": "Translate hello into French and Japanese: café, 東京." }], "generation": { "temperature": 0, "max_tokens": 32 } }
+  ]
+}
